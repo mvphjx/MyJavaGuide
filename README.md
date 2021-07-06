@@ -1,13 +1,13 @@
 # MyJavaGuide java知识体系
-##JavaSE基础
+## JavaSE基础
 
-###基础语法和面向对象
+### 基础语法和面向对象
     数据类型
     变量、赋值、基本运算
     流程控制：if while for
     函数
 
-###集合框架
+### 集合框架
     主要接口如下
     Collection
     Set
@@ -20,7 +20,7 @@
     ConcurrentMap
 
 
-###IO框架
+### IO框架
 
 #### InputStream/OutputStream：这是基类，它们是抽象类。
 - FileInputStream/FileOutputStream：输入源和输出目标是文件的流。
@@ -35,32 +35,32 @@
 - BufferedReader/BufferedWriter：装饰类，对输入/输出流提供缓冲，以及按行读写功能；
 - PrintWriter：装饰类，可将基本类型和对象转换为其字符串形式输出的类。
 
-###网络编程
+### 网络编程
 Socket
 
-##JavaEE基础
-###JDBC
+## JavaEE基础
+### JDBC
     java Database Connectivity 数据库连接API
-###JNDI
+### JNDI
     Java Name and Directory Interface；JNDI API 被用于执行名字和目录服务。
-###EJB
+### EJB
     Enterprise JavaBean；分布式规范
-###RMI
+### RMI
     RemoteMethod Invoke；RMI是一种被EJB使用的更底层的协议。
-###JSP
+### JSP
     Java Server Pages；Jsp页面由html代码和嵌入其中的Java新代码所组成。
-###Servlet
+### Servlet
     servlet是一种小型的java程序，它扩展了web服务器的功能。
-###JPA
+### JPA
     Java Persistence API；Java持久层API
-###其他
+### 其他
     JMS（Java Message Service）JMS是用于和面向消息的中间件相互通信的应用程序接口（API）。
     JTA（Java Transaction Architecture）Java事务API。
     JTS(Java Transaction Service) JTS是CORBA OTS事务监控的基本的实现。
     JavaMail JavaMail是用于存取邮件服务的API，它提供了一套邮件服务器的抽象类。
     JAF（JavaBeans Activation Framework）
 
-##Java高级特性
+## Java高级特性
 ### 并发编程
 #### Thread
 属性以及方法：
@@ -163,20 +163,20 @@ Socket
 JMM是一个语言级的内存模型，处理器内存模型是硬件级的内存模型，顺序一致性内存模型是一个理论参考模型
 
 
-##框架
-###Spring
-###SpringMVC
-###SptingBoot
-###SpringData
-###Hibernate
-###Mybatis
-###Mybatis-Plus
+## 框架
+### Spring
+### SpringMVC
+### SptingBoot
+### SpringData
+### Hibernate
+### Mybatis
+### Mybatis-Plus
 
 
-##数据结构与算法
+## 数据结构与算法
 
 
-##网络通信
+## 网络通信
 TCP
 HTTP
 
@@ -192,19 +192,19 @@ RPC
 
 
 
-##缓存中间件
+## 缓存中间件
 redis
 memcached
 
 
-##消息中间件
+## 消息中间件
 ActiveMQ
 RabbitMQ
 RocketMQ
 kafka
 
 
-##搜索中间件
+## 搜索中间件
 Lucene
 Solr
 ElasticSearch
@@ -212,14 +212,14 @@ Logstash
 Kibana
 
 
-##存储中间件
+## 存储中间件
 fastdfs
 hdfs
 hbase
 mongodb
 
 
-##微服务
+## 微服务
 服务注册 eureka
 负载均衡&Session共享
 断路器
@@ -229,7 +229,7 @@ mongodb
 最佳实践：Spring Cloud
 
 
-##DevOps
+## DevOps
 Maven
 SVN/Git
 Jenkins
@@ -239,34 +239,34 @@ Idea
 
 
 
-##全局把控
-###开发管理
+## 全局把控
+### 开发管理
 敏捷开发
 瀑布式开发
 螺旋式开发
 迭代式开发
 
-###开发模式
+### 开发模式
 TDD 测试驱动开发
 BDD 行为驱动开发
 ATDD 验收测试驱动开发
 DDD 领域驱动开发
 
-###架构分层和分类
+### 架构分层和分类
 业务架构
 应用架构
 数据架构
 代码架构
 技术架构
 
-###架构演进
+### 架构演进
 单体架构
 分布式架构
 微服务架构
 service mesh
 serverless
 
-###架构核心要素
+### 架构核心要素
 高性能架构
 可用性架构
 伸缩性架构
