@@ -7,7 +7,7 @@ import java.util.concurrent.Callable;
  * @version 1.0
  * @date 2021年7月4日19:40:18
  */
-public class MyExecutor {
+public class MyFutureExecutor {
 
 	static class ExecuteThread<V> extends Thread {
 		private V result = null;
@@ -74,7 +74,7 @@ public class MyExecutor {
 	}
 
 	public static void main(String[] args) {
-		MyExecutor executor = new MyExecutor();
+		MyFutureExecutor executor = new MyFutureExecutor();
 		// 子任务
 		Callable<Integer> subTask = new Callable<Integer>() {
 

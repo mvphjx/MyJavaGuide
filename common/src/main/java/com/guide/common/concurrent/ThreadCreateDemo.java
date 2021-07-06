@@ -10,6 +10,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * 线程创建的几种方法
+ *
  * @author hjx
  * @version 1.0
  * @date 2021/7/4 17:15
@@ -38,7 +39,12 @@ public class ThreadCreateDemo
         System.out.println(thread.getState());
         try
         {
-            //Waits for this thread to die.
+            /*
+            等待线程运行结束
+            1.synchronized
+            2.判断thread.isAlive()
+            3.循环执行thread.wait()
+             */
             thread.join();
         }
         catch (InterruptedException e)
@@ -83,6 +89,7 @@ public class ThreadCreateDemo
         System.out.println(thread.getState());
         System.out.println("---------type2 finish\n\n");
     }
+
     static class HelloRunnable implements Runnable
     {
         @Override
@@ -112,6 +119,7 @@ public class ThreadCreateDemo
         }
         System.out.println("---------type3 finish\n\n");
     }
+
     static class HelloCallable implements Callable
     {
         @Override
@@ -128,19 +136,14 @@ public class ThreadCreateDemo
     public static void create4()
     {
         System.out.println("---------type4");
-        ThreadFactory threadFactory =  new ThreadFactory()
-        {
-            @Override
-            public Thread newThread(Runnable r)
-            {
-                Thread thread = new Thread(r);
-                thread.setName("Demo4");
-                thread.setPriority(Thread.MIN_PRIORITY);
-                return thread;
-            }
+        ThreadFactory threadFactory = r -> {
+            Thread thread = new Thread(r);
+            thread.setName("Demo4");
+            thread.setPriority(Thread.MIN_PRIORITY);
+            return thread;
         };
-        ExecutorService executorService = new ThreadPoolExecutor(2, 2, 0,
-                TimeUnit.MINUTES, new LinkedBlockingQueue<>(),threadFactory);
+        ExecutorService executorService = new ThreadPoolExecutor(2, 2, 0, TimeUnit.MINUTES, new LinkedBlockingQueue<>(),
+                threadFactory);
         executorService.submit(new HelloCallable());
         executorService.submit(new HelloRunnable());
         executorService.shutdown();

@@ -6,7 +6,8 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 /**
- * 显式锁 实现生产者消费者
+ * 生产者消费者
+ * 基于显式锁 (Lock ReentrantLock AbstractQueuedSynchronizer)实现
  *
  * @author hjx
  * @version 1.0
@@ -14,6 +15,12 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 public class ProducerConsumerDemo
 {
+	public static void main(String[] args) {
+		MyBlockingQueue<String> queue = new MyBlockingQueue<>(10);
+		new Producer(queue).start();
+		new Consumer(queue).start();
+
+	}
 
 	static class MyBlockingQueue<E> {
 		private Queue<E> queue = null;
@@ -32,6 +39,9 @@ public class ProducerConsumerDemo
 			lock.lockInterruptibly();
 			try{
 				while (queue.size() == limit) {
+					System.out.println("Queue Full->Wait");
+					//wait() ->IllegalMonitorStateException
+					//lock.wait(); ->IllegalMonitorStateException
 					notFull.await();
 				}
 				queue.add(e);
@@ -46,6 +56,7 @@ public class ProducerConsumerDemo
 			lock.lockInterruptibly();
 			try{
 				while (queue.isEmpty()) {
+					System.out.println("Queue Empty->Wait");
 					notEmpty.await();
 				}
 				E e = queue.poll();
@@ -100,11 +111,6 @@ public class ProducerConsumerDemo
 		}
 	}
 
-	public static void main(String[] args) {
-		MyBlockingQueue<String> queue = new MyBlockingQueue<>(10);
-		new Producer(queue).start();
-		new Consumer(queue).start();
 
-	}
 
 }
