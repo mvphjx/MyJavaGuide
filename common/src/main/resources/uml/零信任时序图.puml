@@ -1,0 +1,20 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+participant "RCP" as Client #99FF99
+participant "代理服务器" as PServer
+participant "零信任服务器" as 0Server
+participant "WS服务器" as WSServer #orange
+Client -> PServer: 登录请求
+PServer <-> 0Server: 接口认证
+PServer -> PServer: 缓存令牌
+PServer -> WSServer: 携带令牌转发
+WSServer -> WSServer: 业务处理
+WSServer -> Client: 返回
+Client -> PServer: 其他请求
+PServer -> PServer: 获取令牌
+PServer -> WSServer: 携带令牌转发
+WSServer -> WSServer: 业务处理
+WSServer -> Client: 返回
+@enduml
