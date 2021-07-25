@@ -30,7 +30,7 @@ public class Server
         log.info("启动服务");
         while (true)
         {
-            //等待客户端连接
+            //阻塞，直到与客户端建立连接
             Socket socket = serverSocket.accept();
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
