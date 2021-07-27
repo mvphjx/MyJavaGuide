@@ -1,0 +1,20 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+abstract class AbstractList
+abstract class AbstractCollection
+interface List
+interface Collection
+
+class ArrayList {
+Object[] elementData
+size()
+}
+Collection <|- List
+List <|-- AbstractList
+Collection <|-- AbstractCollection
+AbstractCollection <|- AbstractList
+AbstractList <|-- ArrayList
+
+
+@enduml
