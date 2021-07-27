@@ -1,0 +1,21 @@
+@startuml
+node 第三方系统 {
+
+}
+node Jboss {
+
+}
+node 比对器 {
+
+}
+
+frame 足迹接口服务 {
+  node 接口服务器
+  database MySql
+}
+
+第三方系统 -[bold]> 接口服务器 : http
+接口服务器 -[bold]> Jboss : ejb
+接口服务器 --[bold]> MySql : 日志
+Jboss -[bold]> 比对器
+@enduml

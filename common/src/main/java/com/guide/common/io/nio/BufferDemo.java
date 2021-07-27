@@ -1,9 +1,17 @@
 package com.guide.common.io.nio;
 
+import cn.hutool.core.io.IoUtil;
+import cn.hutool.core.io.NioUtil;
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+import java.nio.channels.FileChannel;
+import java.nio.charset.Charset;
 
 /**
  * Buffer
@@ -22,7 +30,7 @@ import java.nio.ByteBuffer;
 @Slf4j
 public class BufferDemo
 {
-    public static void main(String[] args)
+    public static void main(String[] args) throws Exception
     {
         byte[] bytes = { 1, 2, 3 };
         //工厂方法
@@ -32,6 +40,11 @@ public class BufferDemo
         log.info("position（位置）" + buffer.position());
         log.info("直接缓冲区" + buffer.isDirect());
         limit((ByteBuffer) buffer);
+        //读和写
+        ByteBuffer byteBuffer = ByteBuffer.allocate(1024);
+        write(byteBuffer);
+        read1(byteBuffer);
+        read2(byteBuffer);
     }
 
     /**
@@ -54,6 +67,54 @@ public class BufferDemo
         {
             e.printStackTrace();
         }
-
     }
+
+    /**
+     * 写模式
+     *
+     * @param buffer
+     */
+    public static void write(ByteBuffer buffer) throws Exception
+    {
+        FileInputStream fileInputStream = new FileInputStream(new File(ChannelDemo.PATH));
+        try (FileChannel channel = fileInputStream.getChannel())
+        {
+            //读取内容写入buffer
+            channel.read(buffer);
+            //从buffer读取内容
+            //写模式 转变为 读模式
+
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        fileInputStream.close();
+    }
+
+    /**
+     * 读模式 方式1
+     *
+     * @param buffer
+     */
+    public static void read1(ByteBuffer buffer) throws Exception
+    {
+        //从buffer读取内容
+        String text = new String(buffer.array());
+        System.out.println(text);
+    }
+
+    /**
+     * 读模式 方式2 flip
+     *
+     * @param buffer
+     */
+    public static void read2(ByteBuffer buffer) throws Exception
+    {
+        //从buffer读取内容
+        buffer.flip();
+        CharBuffer charBuffer = Charset.forName("UTF-8").decode(buffer);
+        System.out.println(charBuffer);
+    }
+
 }
