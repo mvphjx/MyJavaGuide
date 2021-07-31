@@ -31,6 +31,7 @@ public class NioClient
         Selector selector = Selector.open();
         socketChannel.configureBlocking(false);
         socketChannel.register(selector, SelectionKey.OP_READ);
+        log.info("建立通道："+socketChannel);
         log.info("新开线程，处理服务端相应的消息");
         new Thread(new NioClientHandler(selector)).start();
         log.info("阻塞命令行，用来发送消息");
@@ -40,6 +41,7 @@ public class NioClient
             String request = scanner.nextLine();
             if (request != null && request.length() > 0)
             {
+                log.info("发送消息");
                 socketChannel.write(Charset.forName("UTF-8").encode(nickname + " : " + request));
             }
         }
