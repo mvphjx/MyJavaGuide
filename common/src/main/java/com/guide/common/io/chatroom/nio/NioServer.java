@@ -1,5 +1,6 @@
 package com.guide.common.io.chatroom.nio;
 
+import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.BufferedWriter;
@@ -22,8 +23,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
- * 聊天室服务器
- *
+ * NIO聊天室服务器
+ * 优点：只需要一个线程就可以批量处理客户端请求/连接
  * @author hjx
  * @version 1.0
  * @date 2021年7月31日19:36:52
@@ -32,87 +33,21 @@ import java.util.concurrent.Executors;
 public class NioServer
 {
     private int DEFAULT_PORT = 8888;
-    private final String QUIT = "quit";
-
-    private ServerSocket serverSocket;
-    //客户端连接
-    private Map<Integer, Writer> connectedClients = new HashMap<>();
-    //多线程处理客户端连接
-    private ExecutorService executorService = Executors.newFixedThreadPool(10);
-
-    public synchronized void addClient(Socket socket) throws IOException
-    {
-        if (socket != null)
-        {
-            int port = socket.getPort();
-            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-            connectedClients.put(port, writer);
-            log.info(port + "上线！");
-        }
-    }
-
-    public synchronized void removeClient(Socket socket) throws IOException
-    {
-        if (socket != null)
-        {
-            int port = socket.getPort();
-            if (connectedClients.containsKey(port))
-            {
-                connectedClients.get(port).close();
-            }
-            connectedClients.remove(port);
-            log.info(port + "下线！");
-        }
-    }
-
-    public synchronized void forwardMessage(Socket socket, String fwdMsg) throws IOException
-    {
-        for (Integer id : connectedClients.keySet())
-        {
-            if (!id.equals(socket.getPort()))
-            {
-                Writer writer = connectedClients.get(id);
-                writer.write(fwdMsg);
-                writer.flush();
-            }
-        }
-    }
-
-    public boolean readyToQuit(String msg)
-    {
-        if (msg.equals(QUIT))
-        {
-            return true;
-        }
-        return false;
-    }
-
-    public synchronized void close()
-    {
-        if (serverSocket != null)
-        {
-            try
-            {
-                serverSocket.close();
-            }
-            catch (IOException e)
-            {
-                e.printStackTrace();
-            }
-        }
-    }
+    private ServerSocketChannel serverSocketChannel;
+    private Selector selector;
 
     public void start()
     {
         try
         {
-            log.info("服务器启动，等待客户端接入");
-            ServerSocketChannel serverSocketChannel = ServerSocketChannel.open();
+            log.info("构建ServerSocketChannel：端口、非阻塞");
+            serverSocketChannel = ServerSocketChannel.open();
             serverSocketChannel.bind(new InetSocketAddress("127.0.0.1", DEFAULT_PORT));
             serverSocketChannel.configureBlocking(false);
-            Selector selector = Selector.open();
-            log.info("多路复用器，开启客户端接入监听");
+            selector = Selector.open();
+            log.info("构建多路复用器，开启客户端接入监听");
             serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
+            log.info("服务器启动，等待客户端接入");
             while (true)
             {
                 int count = selector.select();
@@ -123,7 +58,7 @@ public class NioServer
                     while (iterator.hasNext())
                     {
                         SelectionKey key = iterator.next();
-                        serverHandler(key, selector);
+                        serverHandler(key);
                         iterator.remove();
                     }
                 }
@@ -139,16 +74,37 @@ public class NioServer
         }
     }
 
-    private void serverHandler(SelectionKey key, Selector selector) throws Exception
+    /**
+     * 关闭连接，释放资源
+     */
+    private void close()
+    {
+        if (serverSocketChannel != null)
+        {
+            try
+            {
+                serverSocketChannel.close();
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void serverHandler(SelectionKey key) throws Exception
     {
         if (key.isAcceptable())
         {
             log.info("客户端接入");
             ServerSocketChannel serverSocketChannel = (ServerSocketChannel) key.channel();
+            log.info("获取客户端SocketChannel");
             SocketChannel channel = serverSocketChannel.accept();
-            log.info("多路复用器，开启客户端消息监听");
+            log.info("开启非阻塞模式");
             channel.configureBlocking(false);
+            log.info("利用多路复用器，开启客户端消息监听");
             channel.register(selector, SelectionKey.OP_READ);
+            log.info("使用ByteBuffer，返回欢迎信息");
             ByteBuffer buffer = ByteBuffer.wrap("欢迎加入聊天室".getBytes());
             channel.write(buffer);
         }
@@ -157,12 +113,12 @@ public class NioServer
             log.info("客户端发来消息");
             SocketChannel channel = (SocketChannel) key.channel();
             ByteBuffer buffer = ByteBuffer.allocate(1024);
-            String msg = "";
+            StringBuilder msg = new StringBuilder();
             try
             {
                 while (channel.read(buffer) > 0)
                 {
-                    msg = msg + new String(buffer.array());
+                    msg.append(new String(buffer.array()));
                 }
             }
             catch (IOException e)
@@ -171,23 +127,24 @@ public class NioServer
                 key.cancel();
                 channel.close();
                 log.info("XXX客户端下线");
-                broadcastMsg(selector, "XXX客户端下线", key);
+                broadcastMsg("XXX客户端下线", key);
                 return;
             }
             channel.register(selector, SelectionKey.OP_READ);
-            if ("".equals(msg))
+            if (StrUtil.isEmpty(msg.toString()))
             {
                 //为什么为空
+                log.warn("客户端信息为空");
                 return;
             }
-            broadcastMsg(selector, msg, key);
+            broadcastMsg(msg.toString(), key);
         }
     }
 
     //广播给其他客户端
-    private void broadcastMsg(Selector selector, String msg, SelectionKey key) throws IOException
+    private void broadcastMsg(String msg, SelectionKey key) throws IOException
     {
-
+        log.info("广播信息："+msg);
         for (SelectionKey selectionKey : selector.keys())
         {
             if (selectionKey == key)
