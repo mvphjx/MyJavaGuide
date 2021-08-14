@@ -1,5 +1,6 @@
 package com.guide.common.rpc.codec;
 
+import cn.hutool.core.lang.Assert;
 import com.guide.common.model.Student;
 import com.guide.common.rpc.util.ReflectionUtil;
 import org.junit.Test;
@@ -35,7 +36,7 @@ public class ReflectionUtilTest
     public void testNewInstans() throws Exception
     {
         Student student = ReflectionUtil.newInstans(Student.class);
-        System.out.println(student);
+        Assert.notNull(student);
     }
 
     /**
@@ -45,10 +46,7 @@ public class ReflectionUtilTest
     public void testGetPublicMethods() throws Exception
     {
         Method[] publicMethods = ReflectionUtil.getPublicMethods(Student.class);
-        for (Method publicMethod : publicMethods)
-        {
-            System.out.println(publicMethod);
-        }
+        Assert.notEmpty(publicMethods);
     }
 
     /**
@@ -68,7 +66,7 @@ public class ReflectionUtilTest
         }
         Student student = new Student();
         ReflectionUtil.invoke(student, method, "小明");
-        System.out.println(student);
+        Assert.isTrue("小明".equals(student.getName()));
     }
 
 }
