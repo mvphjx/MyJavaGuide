@@ -1,0 +1,22 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+mainframe CA登录时序图
+autonumber
+participant "浏览器" as Client
+participant "网关服务器" as GateServer #99FF99
+participant "WEB服务器" as Server
+== PKI解析 ==
+note over Client: UI改造\n方式1 业务系统增加CA登录按钮\n方式2 用户收藏业务系统对应的URL\n方式3 网关客户端统一管理，各个系统URL\n方式4 ...
+Client -> GateServer: 打开指定的网关URL
+GateServer -> GateServer:解析CA证书/PKI等操作
+GateServer -> Server:携带证书信息转发
+
+== 客户端登录 ==
+Server -> Server: 登录校验
+note right
+参考《应用接入改造标准》
+受保护的应用可以在HTTP Header中
+接收身份认证网关系统中传递过来的证书信息
+end note
+Server -> Client: 打开系统页面
+@enduml

@@ -1,0 +1,14 @@
+@startuml
+node 第三方系统 {
+
+}
+frame 接口服务 {
+  node 接口服务器
+
+}
+database Oracle{
+}
+
+第三方系统 -[bold]> 接口服务器 : http
+接口服务器 -[bold]> Oracle
+@enduml
