@@ -1,0 +1,14 @@
+digraph mygraph {
+  node [shape=box];
+  Swagger2Config-> "@EnableSwagger2"
+  "@EnableSwagger2"-> Swagger2DocumentationConfiguration[ label = "@Import" ]
+  Swagger2DocumentationConfiguration -> SpringfoxWebMvcConfiguration  [ label = "@Import" ]
+  Swagger2DocumentationConfiguration -> Swagger2Controller  [ label = "Create" ]
+  SpringfoxWebMvcConfiguration -> "@EnablePluginRegistries\n{DocumentationPlugin,ApiListingBuilderPlugin...}"
+  "@EnablePluginRegistries\n{DocumentationPlugin,ApiListingBuilderPlugin...}" -> DocumentationPluginsManager [ label = "Register Bean\n@Autowired" ]
+  "@SpringBootApplication" -> SpringApplication [ label = "run" ]
+  SpringApplication -> ServletWebServerApplicationContext [ label = "refreshContext" ]
+  ServletWebServerApplicationContext -> DocumentationPluginsBootstrapper [ label = "refresh" ]
+  DocumentationPluginsManager -> DocumentationPluginsBootstrapper  [ label = "@Autowired" ]
+  DocumentationPluginsBootstrapper-> DocumentationCache [ label = "Start\nFound plugin" ]
+}
