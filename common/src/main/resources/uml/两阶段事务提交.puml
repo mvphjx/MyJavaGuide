@@ -1,0 +1,15 @@
+@startuml
+participant "协调者" as DB #99FF99
+participant "参与者" as Client
+DB -> Client: 要求所有参与者进入准备阶段
+activate Client
+return  已进入准备阶段
+DB -> Client: 要求所有参与者进入提交阶段
+activate Client
+return 已进入提交阶段
+opt [Abort/Timeout]
+    DB -> Client: 要求所有参与者回滚事务
+    activate Client
+    return 已回滚事务
+end
+@enduml

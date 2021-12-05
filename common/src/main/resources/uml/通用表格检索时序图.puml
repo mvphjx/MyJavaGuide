@@ -5,14 +5,14 @@ autonumber
 participant "浏览器" as Client #99FF99
 participant "接口服务器" as Server
 == 检索 ==
-Client -> Server: 查询列表初始化数据
-Server -> Client:返回：列配置、检索配置、列描述
-Client -> Client:列表界面初始化
-Client -> Server: 查询数据：列信息、检索条件
+Client -> Server: [API-配置读取]
+Server -> Client:返回：列配置、列表检索等配置\n格式为《HISIGN-PU-1030-2016 列表的用户偏好设置》
+Client -> Client:解析配置，界面初始化
+Client -> Server: [API-数据检索]：列信息、检索条件
 Server -> Client:返回：列表数据
 Client -> Client:渲染列表数据
 == 用户偏好配置 ==
-Client -> Server: 保存列配置
-Client -> Server: 保存检索配置
-Client -> Server: .....
+Client -> Client:用户修改配置,转换为XML格式
+Client -> Server: [API-保存配置]
+Server -> Client: 保存成功
 @enduml

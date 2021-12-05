@@ -1,0 +1,22 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+box "用户域" #LightBlue
+participant "浏览器" as Client #99FF99
+end box
+box "防火墙" #99FF99
+participant "可信接入检控" as FireWall
+end box
+box "数据域" #LightBlue
+participant "Nginx服务器（7950）" as Nginx
+participant "WEB服务器（7951）" as WebServer #orange
+participant "H5服务器（8000）" as H5Server
+
+end box
+Client -> Nginx: http://zzw-xz.qds.sd/abisweb/*
+Nginx -> WebServer: 反向代理
+Client -> Nginx: http://zzw-xz.qds.sd/h5/*
+Nginx -> H5Server: 反向代理
+WebServer -> H5Server: http://zzw-xz.qds.sd/h5/* \n（内网请求，需要配好域名）
+@enduml
