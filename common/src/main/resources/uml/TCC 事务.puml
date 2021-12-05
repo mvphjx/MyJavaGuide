@@ -1,0 +1,34 @@
+@startuml
+    "Fenix's Bookstore" ->> 账号服务: 业务检查，冻结货款
+	alt 成功
+		账号服务 -->> "Fenix's Bookstore": 记录进入Confirm阶段
+	else 业务或网络异常
+		账号服务 -->> "Fenix's Bookstore": 记录进入Cancel阶段
+	end
+	"Fenix's Bookstore" ->> 仓库服务: 业务检查，冻结商品
+	alt 成功
+		仓库服务 -->> "Fenix's Bookstore": 记录进入Confirm阶段
+	else 业务或网络异常
+		仓库服务 -->> "Fenix's Bookstore": 记录进入Cancel阶段
+	end
+	"Fenix's Bookstore" ->> 商家服务: 业务检查
+	alt 成功
+		商家服务 -->> "Fenix's Bookstore": 记录进入Confirm阶段
+	else 业务或网络异常
+		商家服务 -->> "Fenix's Bookstore": 记录进入Cancel阶段
+	end
+    opt 全部记录均返回Confirm阶段
+		loop 循环直至全部成功
+        	"Fenix's Bookstore"->>账号服务: 完成业务，扣减冻结的货款
+        	"Fenix's Bookstore"->>仓库服务: 完成业务，扣减冻结的货物
+        	"Fenix's Bookstore"->>商家服务: 完成业务，货款收款
+		end
+    end
+    opt 任意服务超时或返回Cancel阶段
+		loop 循环直至全部成功
+        	"Fenix's Bookstore"->>账号服务:取消业务，解冻货款
+        	"Fenix's Bookstore"->>仓库服务:取消业务， 解冻货物
+        	"Fenix's Bookstore"->>商家服务:取消业务
+		end
+    end
+@enduml

@@ -1,0 +1,21 @@
+@startuml
+participant "协调者" as DB #99FF99
+participant "参与者" as Client
+DB -> Client: 询问阶段：是否有把握完成事务
+activate Client
+return  是
+DB -> Client: 准备阶段：写入日志，锁定资源
+activate Client
+return 确认（Ack）
+DB -> Client: 提交阶段：提交事务
+activate Client
+return 已提交
+opt [失败]
+    DB -> Client: 要求所有参与者回滚事务
+    activate Client
+    return 已回滚事务
+    opt [超时]
+        Client -> Client: 提交事务
+    end
+end
+@enduml
