@@ -1,17 +1,16 @@
-package com.java.guide.common.io.bio;
+package com.java.guide.common.io;
 
 import com.guide.common.io.chatroom.bio.ChatClient;
 import com.guide.common.io.chatroom.bio.ChatServer;
 import org.junit.Test;
 
-import java.util.concurrent.CountDownLatch;
 
 /**
  * @author hjx
  * @version 1.0
  * @date 2021/7/25 23:46
  */
-public class ChatRoomTest
+public class BioChatRoomTest
 {
     @Test
     public void serverStart()

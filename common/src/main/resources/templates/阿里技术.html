@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>阿里技术</title>
+</head>
+<body>
+<div id="content">
+    <div v-for="article in articles"
+         v-bind:key="article.id"
+         v-bind:title="article.title">
+        <a v-bind:href=article.url target="_blank" rel="noopener noreferrer"
+           data-za-detail-view-element_name="Title">{{article.title}}</a>
+<!--            <spsn>{{article.excerpt}}</spsn>-->
+    </div>
+</div>
+
+</body>
+<script src="https://cdn.bootcss.com/vue/2.4.2/vue.js"></script>
+<script src="../js/alidata.js"></script>
+<script>
+    var articles =alidata||[{"updateTime":1629451250000,"title":"XXX","url":"https://zhuanlan.zhihu.com/p/401884037","createTime":1629451250000,"id":401884037}];
+    new Vue({
+        el: "#content",
+        data: {
+            articles: articles
+        }
+    });
+
+</script>
+</html>
