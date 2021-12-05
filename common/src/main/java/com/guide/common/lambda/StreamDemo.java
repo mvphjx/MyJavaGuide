@@ -102,12 +102,13 @@ public class StreamDemo
         Map<Integer, List<Student>> groups = students.stream().collect(Collectors.groupingBy(Student::getAge));
         JSON json = JSONUtil.parse(groups);
         System.out.println(JSONUtil.toJsonStr(json, 2));
-        //参数如下，缺省为  groupingBy  map list
-        // groupingBy(
-        // Function<? super T, ? extends K> classifier,
-        // Supplier<M> mapFactory,
-        // Collector<? super T, A, D> downstream)
-        Map<Integer, List<Student>> groupsBase = students.stream().collect(Collectors.groupingBy(Student::getAge,HashMap::new,Collectors.toList()));
+        /**
+         * groupingBy 参数如下，缺省为
+         * Function   生成分组主键
+         * Supplier   创建空Map HashMap::new
+         * Collector  收集器 Collectors.toList()
+         */
+        Map<Integer, List<Student>> groupsBase = students.stream().collect(Collectors.groupingBy(Student::getAge));
         System.out.println(JSONUtil.toJsonStr(JSONUtil.parse(groupsBase), 2));
     }
 
