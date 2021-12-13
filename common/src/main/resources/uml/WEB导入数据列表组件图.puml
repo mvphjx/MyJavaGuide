@@ -1,0 +1,41 @@
+@startuml
+skinparam component {
+    borderColor #464547
+}
+package "ForeEnd" {
+  [List Page]
+  [JSP Check Page] #afdfe4
+  [JSP SendMatch Component] #afdfe4
+  [JSP Search Component] #afdfe4
+  [Vue Search Component]  #afdfe4
+  [InListSearch Component]  #99FF99
+  [Table Component] #99FF99
+  [Parse Component] #99FF99
+  [API Component] #99FF99
+}
+
+package "WEB" {
+  [CommonTableQueryCtrl] #afdfe4
+  [SearchTableCtrl] #afdfe4
+  [InListSearchBiz] #99FF99
+}
+
+package "Jboss" {
+  [INetJDBCInListSearch]
+}
+[JSP Check Page]-->[InListSearch Component]
+[JSP SendMatch Component]-->[InListSearch Component]
+[List Page]-->[JSP Search Component]
+[List Page]-->[Vue Search Component]
+[Vue Search Component]-->[InListSearch Component]
+[JSP Search Component]-->[InListSearch Component]
+[InListSearch Component]-->[Table Component]
+[InListSearch Component]-->[Parse Component]
+[InListSearch Component]-->[API Component]
+[CommonTableQueryCtrl] --> [InListSearchBiz]
+[SearchTableCtrl] --> [InListSearchBiz]
+[InListSearchBiz]..>[INetJDBCInListSearch]:EJB
+[Vue Search Component]..>[CommonTableQueryCtrl]:HTTP
+[JSP Search Component]..>[SearchTableCtrl]:HTTP
+[API Component]..>[SearchTableCtrl]:HTTP
+@enduml
