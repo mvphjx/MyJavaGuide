@@ -1,10 +1,13 @@
-package com.guide.common.design.forbuild;
+package com.guide.common.design.forbuild.di;
 
 import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 容器存放的实例（bean）定义
+ */
 @Data
 public class MyBeanDefinition
 {

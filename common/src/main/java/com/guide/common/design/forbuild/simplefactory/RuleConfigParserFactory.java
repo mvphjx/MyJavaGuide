@@ -7,6 +7,9 @@ import java.util.Map;
 
 /**
  * 简单工厂（Simple Factory）
+ * 静态工厂方法模式（Static Factory Method Pattern）
+ *
+ * 内部创建、维护多个实例，通过参数获取指定实例
  */
 public class RuleConfigParserFactory
 {

@@ -1,4 +1,4 @@
-package com.guide.common.design.forbuild;
+package com.guide.common.design.forbuild.di;
 
 import com.google.common.annotations.VisibleForTesting;
 
