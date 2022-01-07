@@ -1,0 +1,47 @@
+@startuml
+node 浏览器 {
+
+}
+
+node 统一网关[
+    统一网关
+    ....
+    Nginx
+    ]
+
+node H5Server {
+
+}
+
+database 数据库 {
+
+}
+
+node Jboss {
+
+}
+
+
+frame WEB {
+  node 前端服务[
+     前端服务
+     ....
+     Nginx
+     Vue
+     ]
+  node AbisWeb[
+    AbisWeb
+    ....
+    Tomcat
+    HTTP接口
+    Jsp页面
+    ]
+}
+浏览器 -[bold]> 统一网关 : http
+统一网关 -[bold]> 前端服务 : http
+统一网关 -[bold]> AbisWeb : http-jsp
+前端服务 -[bold]> AbisWeb : http
+AbisWeb --> Jboss : ejb
+AbisWeb --[bold]> 数据库 : jdbc-统计
+统一网关 --[bold]> H5Server : http
+@enduml
