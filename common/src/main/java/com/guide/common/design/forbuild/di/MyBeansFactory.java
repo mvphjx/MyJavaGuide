@@ -14,7 +14,9 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class MyBeansFactory
 {
+    //对象池
     private ConcurrentHashMap<String, Object> singletonObjects = new ConcurrentHashMap<>();
+    //对象定义池
     private ConcurrentHashMap<String, MyBeanDefinition> beanDefinitions = new ConcurrentHashMap<>();
 
     public void addBeanDefinitions(List<MyBeanDefinition> beanDefinitionList)
