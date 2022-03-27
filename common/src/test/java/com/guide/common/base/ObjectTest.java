@@ -1,4 +1,4 @@
-package com.java.guide.common.base;
+package com.guide.common.base;
 
 import cn.hutool.core.util.ObjectUtil;
 

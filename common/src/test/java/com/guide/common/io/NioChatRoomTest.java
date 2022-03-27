@@ -1,4 +1,4 @@
-package com.java.guide.common.io;
+package com.guide.common.io;
 
 import com.guide.common.io.chatroom.bio.ChatClient;
 import com.guide.common.io.chatroom.nio.NioClient;

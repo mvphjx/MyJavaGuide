@@ -1,4 +1,4 @@
-package com.java.guide.common.uml.demo;
+package com.guide.common.uml.demo;
 
 import java.util.List;
 
