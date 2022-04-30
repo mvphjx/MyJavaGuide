@@ -1,0 +1,144 @@
+@startuml
+
+note as N1
+基础管理：用户、组织机构、角色、权限、消息
+  参考若依平台
+数据管理：人员、案件、比对、比中
+  1.参考指纹系统，适度简化
+    多份图像特征CID X
+    JSON字段 X
+    不入库比对 X
+    多生物比对 X
+    高级比对参数 X
+  2.适配FPT5.0/6.0字段
+  3.统计需求
+    统计效率，比中信息表信息字段冗余，需要同步机制
+    新增Status，业务状态：数据待清洗、逻辑删除
+BI&统计：
+  中间结果表
+  分析报告管理
+  BI指标配置
+
+end note
+package TP {
+    entity UniPerson{
+    ID
+    DefaultPersonId
+    CardCount
+    CaseCount
+    }
+    entity Person{
+    ID
+    PersonNum
+    CardNum
+    MisPersonNum
+    Status
+    }
+    entity PersonCaseInfo{
+    ID
+
+    }
+    entity TPLob{
+    ID
+    PersonId
+    BTY
+    VID
+    FGP
+    GID
+    Score
+    Type
+    Format
+    URL
+    }
+    entity MntSummary{
+    ID
+    LobId0
+    PrintType
+    PointCount
+    CoreCount
+    }
+}
+
+package LP {
+    entity LPCase{
+    ID
+    Status
+    }
+    entity LPCard{
+    ID
+    CaseId
+    }
+    entity LPLob{
+    ID
+    CardId
+    GID
+    Type
+    Score
+    Format
+    URL
+    }
+}
+
+package Query {
+    entity QryTask{
+    ID
+    PersonId
+    LPCaseId
+    LPCardId
+    BTY
+    QryType
+    CandCount
+
+    }
+    entity QryCand{
+    ID
+    QryId
+    Score
+    Rank
+    PersonId
+    LPCaseId
+    LPCardId
+    BTY
+    VID
+    FGP
+    GID
+    }
+    entity SrcCardInfo{
+    ID
+    }
+    entity SrcCardLob{
+    ID
+    QryId
+    }
+}
+
+package HitInfo {
+    entity LTLHitInfo{
+    ID
+    PersonId
+    LPCaseId
+    LPCardId
+    QryId
+    Score
+    BTY
+    VID
+    FGP
+    GID
+
+    }
+    entity TTHitInfo{
+    ID
+    SrcPersonId
+    DestPersonId
+    QryId
+    }
+    entity LLHitInfo{
+    ID
+    SrcLPCaseId
+    SrcLPCardId
+    DestLPCaseId
+    DestLPCardId
+    QryId
+    }
+}
+@enduml
