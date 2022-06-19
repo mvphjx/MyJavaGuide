@@ -16,6 +16,13 @@
         <build.timestamp>${maven.build.timestamp}</build.timestamp>
         <maven.build.timestamp.format>yyyy-MM-dd HH:mm:ss</maven.build.timestamp.format>
     </properties>
+<!--    <repositories>-->
+<!--        <repository>-->
+<!--            <id>com.e-iceblue</id>-->
+<!--            <name>e-iceblue</name>-->
+<!--            <url>https://repo.e-iceblue.cn/repository/maven-public/</url>-->
+<!--        </repository>-->
+<!--    </repositories>-->
     <dependencies>
         <dependency>
             <groupId>cn.hutool</groupId>
@@ -73,7 +80,7 @@
             <version>1.7.31</version>
             <scope>compile</scope>
         </dependency>
-<!--        rpc-->
+        <!--        rpc-->
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
@@ -109,6 +116,11 @@
             <artifactId>mapstruct</artifactId>
             <version>${org.mapstruct.version}</version>
         </dependency>
+<!--        <dependency>-->
+<!--            <groupId>e-iceblue</groupId>-->
+<!--            <artifactId>spire.doc.free</artifactId>-->
+<!--            <version>5.2.0</version>-->
+<!--        </dependency>-->
     </dependencies>
     <build>
         <plugins>
