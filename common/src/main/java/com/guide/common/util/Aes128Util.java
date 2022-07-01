@@ -107,8 +107,8 @@ public class Aes128Util
         catch (Exception e)
         {
             logger.error("String: [{}] Aes128Util decryption error.", content, e);
+            throw new RuntimeException("解密失败");
         }
-        return null;
     }
 
     /**

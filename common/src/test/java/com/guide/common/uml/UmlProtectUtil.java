@@ -25,6 +25,7 @@ public class UmlProtectUtil
     public void decode()
     {
         log.info("开始解密");
+        log.info("密码提示:shenfenId");
         String umlPath = getPath();
         String key = inputKey();
         if (FileUtil.isDirectory(umlPath))
@@ -41,6 +42,7 @@ public class UmlProtectUtil
     public void encode()
     {
         log.info("开始加密");
+        log.info("密码提示:shenfenId");
         String umlPath = getPath();
         String key = inputKey();
         if (FileUtil.isDirectory(umlPath))
