@@ -1,0 +1,18 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+autonumber
+box "客户端" #AliceBlue
+participant "浏览器" as Brower
+participant "PageOffice客户端" as PageOffice #orange
+end box
+participant "Web服务器" as WebServer
+== 前置操作 ==
+note over  of WebServer: 激活/加载授权，启动poserver服务
+note over  of PageOffice: 下载并安装PageOffice客户端\n 一般是在访问相应功能的时候，浏览器自动下载安装
+== 业务流程 ==
+Brower -> Brower :加载SDK：pageoffice.js
+Brower -> PageOffice :POBrowser调用本地程序\n（http://127.0.0.1:57070/）
+PageOffice<->WebServer : 程序初始化\n http://xxx/poserver.zz
+PageOffice-> PageOffice:调用本地Office
+WebServer<->PageOffice : Word增删改查等接口
+@enduml
