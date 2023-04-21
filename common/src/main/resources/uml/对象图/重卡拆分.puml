@@ -1,0 +1,27 @@
+@startuml
+object Card1
+object Card2
+object Card3
+object Card4
+object Card11
+object Card12
+object Card13
+object Card14
+object Card21
+object Card22
+object Card23
+object Card24
+Card21<--> Card22
+Card22<--> Card23:删除？
+Card23<--> Card24
+Card21<--> Card24
+Card11<--> Card12
+Card12<--> Card13:删除？
+Card13<--> Card14
+Card1..Card2:比中
+Card1.. Card3:手动合并
+Card1.. Card4:手动合并
+Card2.. Card3:比中
+Card2.. Card4:身份证相同
+Card3.. Card4:同现场卡比中
+@enduml

@@ -1,0 +1,23 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+autonumber
+participant "浏览器（VUE）" as Client
+participant "Web服务器" as WebServer #orange
+participant "Jboss服务器" as JbossServer
+participant "数据库" as db
+participant "统计服务器" as StatServer #orange
+== 预统计 ==
+StatServer->db : 定期统计\n各种维度统计结果表：  STAT_CNTR_DS
+db->db : 数据标准化，根据需求创建维度视图\n web_stat_vue_view.sql
+== 统计聚合 ==
+Client -> WebServer :接口查询
+WebServer <-> WebServer :维度拆分、SQL拼接
+note over  of WebServer: 【按省统计】根据组织机构前两位分组\n【其他级别分组】根据UNIT_PATH确定层级关系，分组
+
+WebServer <-> JbossServer :查询中间结果表\n多个维度，多次查询
+JbossServer <-> db :查询中间结果表、视图
+WebServer <-> WebServer:聚合、补全、排序
+Client <- WebServer :数据返回
+== 统计展示 ==
+Client -> Client :数据渲染：表格化、图形化
+@enduml

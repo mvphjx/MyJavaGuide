@@ -1,0 +1,41 @@
+@startuml
+node  浏览器{
+
+}
+
+database Mysql #afdfe4{
+
+}
+database MinIo #afdfe4{
+
+}
+database Redis #afdfe4{
+
+}
+node 前端服务 #99FF99 [
+     前端服务（mras-vue）
+     ....
+     Nginx
+     管理端
+     用户端
+]
+node Rsbi [
+      BI统计(Rsbi)
+      ....
+      Tomcat
+]
+node 接口服务[
+     接口服务(mras-svr)
+     ....
+     Tomcat
+     HTTP接口
+     BI统计
+]
+浏览器 -[bold]> 前端服务 : http
+前端服务 --[bold]> 接口服务 : http
+接口服务 -[bold]> Rsbi : http代理
+接口服务 --> Mysql : jdbc
+接口服务 --> MinIo : http
+接口服务 --> Redis : lettuce
+Rsbi--> Mysql : jdbc
+@enduml
