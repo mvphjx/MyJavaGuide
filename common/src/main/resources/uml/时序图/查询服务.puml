@@ -1,0 +1,26 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+autonumber
+participant "Web/WS服务器" as WebServer
+box "Jboss服务器" #AliceBlue
+participant "as_base_net_opi" as opi #orange
+participant "as_tmp_biz_impl" as impl #orange
+participant "abis_solr_util" as util #orange
+end box
+participant "Solr8" as solr
+== 列表查询 ==
+autonumber "<font color=blue> 【#】"
+WebServer-> opi :INetJDBCSearch
+opi-> impl :调用BizJDBCSearch
+note over  of impl: 【全局配置】是否开启、支持的视图
+impl-> impl :调用Xml2SolrUtil，\n生成Solr查询条件
+group#Gold 调用SolrSearchImpl
+impl-> util :调用ABISSolrSearch
+util-> solr :调用SolrClient
+solr-> util :返回QueryResponse
+util-> impl :返回MsgSearchInfo
+impl-> impl :调用AbisSolrResultSet，\n生成ResultSet
+end
+impl-> opi :返回ResultSet
+opi-> WebServer :返回ResultSet
+@enduml

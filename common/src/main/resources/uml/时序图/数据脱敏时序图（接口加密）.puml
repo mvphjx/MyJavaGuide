@@ -1,0 +1,22 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+autonumber
+participant "Web/WS服务器" as WebServer
+participant "Jboss服务器" as JbossServer #orange
+participant "数据库" as db
+== 列表查询 ==
+autonumber "<font color=blue> 【#】"
+WebServer-> JbossServer :INetJDBCSearch
+note over  of JbossServer: 【全局配置】脱敏字段&规则\n【数据过滤配置】过滤用户&过滤触发条件\n【数据脱敏配置】脱敏用户&脱敏触发条件
+JbossServer-> JbossServer :根据配置，数据过滤。\n例如：人员列表
+JbossServer <-> db :数据查询
+JbossServer-> JbossServer :根据配置，数据脱敏。\n例如：候选列表
+JbossServer-> WebServer : 返回脱敏ResultSet
+== 详情查看 ==
+autonumber "<font color=blue> 【#】"
+WebServer-> JbossServer :INetTPCardMgr
+JbossServer <-> db :数据查询
+JbossServer-> JbossServer :根据配置，数据脱敏
+JbossServer-> WebServer : 返回脱敏TPCardObject
+
+@enduml
