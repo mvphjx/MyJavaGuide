@@ -4,19 +4,35 @@ autonumber
 participant "Web/WS服务器" as WebServer
 participant "Jboss服务器" as JbossServer #orange
 participant "数据库" as db
+== 前置配置 ==
+note over  of JbossServer: 【全局配置】脱敏字段&规则\n【数据过滤配置】过滤用户&过滤触发条件\n【数据脱敏配置】脱敏用户&脱敏触发条件
 == 列表查询 ==
 autonumber "<font color=blue> 【#】"
 WebServer-> JbossServer :INetJDBCSearch
-note over  of JbossServer: 【全局配置】脱敏字段&规则\n【数据过滤配置】过滤用户&过滤触发条件\n【数据脱敏配置】脱敏用户&脱敏触发条件
-JbossServer-> JbossServer :根据配置，数据过滤。\n例如：人员列表
+group#Gold 数据过滤
+JbossServer-> JbossServer :将当前用户的数据过滤配置，\n转为查询条件
+JbossServer-> JbossServer :与查询语句拼接
+end
 JbossServer <-> db :数据查询
-JbossServer-> JbossServer :根据配置，数据脱敏。\n例如：候选列表
+group#Gold 数据脱敏
+JbossServer-> JbossServer :将当前用户的数据脱敏配置，\n转为查询条件
+JbossServer-> JbossServer :与查询语句拼接
+JbossServer <-> db :脱敏数据查询
+JbossServer-> JbossServer :根据脱敏规则，进行脱敏
+end
 JbossServer-> WebServer : 返回脱敏ResultSet
 == 详情查看 ==
 autonumber "<font color=blue> 【#】"
 WebServer-> JbossServer :INetTPCardMgr
-JbossServer <-> db :数据查询
-JbossServer-> JbossServer :根据配置，数据脱敏
+JbossServer <-> db :数据查询，TPCardObject
+group#Gold 数据脱敏
+JbossServer-> JbossServer :根据当前用户的数据脱敏配置，\n判断数据是否匹配
+JbossServer-> JbossServer :如果数据匹配\n根据脱敏规则，进行脱敏
+end
 JbossServer-> WebServer : 返回脱敏TPCardObject
-
+== 比中/复核 ==
+autonumber "<font color=blue> 【#】"
+WebServer-> JbossServer :INetQryTaskMgr.finishVerify
+JbossServer-> JbossServer :判断是否比中脱敏人员\n补录比中信息的真实人员信息
+JbossServer-> WebServer : 成功
 @enduml

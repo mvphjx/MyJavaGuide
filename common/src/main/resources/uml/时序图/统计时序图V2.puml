@@ -1,0 +1,25 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+participant "浏览器（VUE）" as client
+participant "Web服务器" as web #orange
+participant "Solr8" as solr #orange
+participant "数据库" as db
+== 数据同步 ==
+solr<->db : 定时同步，各个统计视图数据
+solr<->solr : 数据清洗：\n字段拆分、合并\n身份证校验\n类型转换
+
+== 统计接口 ==
+autonumber "<font color=blue> 【#】"
+client -> web :接口查询
+group#Gold 调用统计工具类
+loop 不同维度拆分,多次查询
+web -> solr :调用SolrClient
+solr -> web :返回QueryResponse
+end
+web -> web :不同维度结果聚合
+end
+web -> web:生成ResponseResult
+web -> client:数据返回
+== 统计展示 ==
+client -> client :数据渲染：表格化、图形化
+@enduml

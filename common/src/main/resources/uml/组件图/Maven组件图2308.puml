@@ -1,0 +1,17 @@
+@startuml
+'https://plantuml.com/component-diagram
+
+component "as_base_common\n数据脱敏配置定义"  as as_base_common
+component "as_base_bzo\n数据脱敏配置定义"  as  as_base_bzo
+component "as_base_biz_impl\n数据脱敏配置缓存"   as as_base_biz_impl
+component "as_base_biz_opi\n脱敏接口定义" as as_base_biz_opi
+as_base_bzo --> as_base_common
+as_base_biz_impl --> as_base_bzo
+as_base_biz_impl --> as_base_biz_opi
+component "as_tmp_biz_impl\n数据脱敏基类\n通用检索数据脱敏实现"  as as_tmp_biz_impl
+as_tmp_biz_impl --> as_base_biz_opi
+component "as_qry_biz_impl\n比对任务数据脱敏实现"  as as_qry_biz_impl
+as_qry_biz_impl --> as_tmp_biz_impl
+component "as_tp_biz_impl\n人员数据脱敏实现"  as as_tp_biz_impl
+as_tp_biz_impl --> as_tmp_biz_impl
+@enduml
