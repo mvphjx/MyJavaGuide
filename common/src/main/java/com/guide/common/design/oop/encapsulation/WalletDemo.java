@@ -1,7 +1,6 @@
 package com.guide.common.design.oop.encapsulation;
 
 import cn.hutool.core.util.IdUtil;
-import sun.plugin.util.UIUtil;
 
 import java.math.BigDecimal;
 
