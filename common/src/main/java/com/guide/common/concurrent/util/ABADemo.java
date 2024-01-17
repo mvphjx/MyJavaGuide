@@ -1,7 +1,7 @@
 package com.guide.common.concurrent.util;
 
-import org.junit.Test;
 
+import org.junit.Test;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.atomic.AtomicStampedReference;
 
@@ -30,6 +30,7 @@ public class ABADemo
         Thread.yield();
 
         new Thread(() -> {
+            // 值已经不是初始的100，但是无法判断
             boolean result = atomicReference.compareAndSet(100, 2019);
             System.out.println(result + " " + atomicReference.get());
         }).start();
