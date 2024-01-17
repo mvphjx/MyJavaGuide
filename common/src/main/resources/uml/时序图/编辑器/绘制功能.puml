@@ -1,0 +1,38 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+box "UI层"
+participant menu
+participant tool
+end box
+box "编辑器/Cavans" #AliceBlue
+participant core
+participant "绘制插件" as dplugin
+participant "缓存插件" as splugin
+participant cavans
+end box
+participant "缓存" as status
+== 绘制模式切换 ==
+autonumber "<font color=blue> 【#】"
+menu -> core :调用XXX
+core -> canvas :canvas对象调整(selectable\evented)
+core -> dplugin :调用绘制插件//TODO \n 或者直接调用缓存插件
+dplugin -> core :调用XXX//TODO
+core -> splugin :调用XXX//TODO，设置状态
+splugin <-> status:同步状态/缓存
+menu <-> status:样式同步，响应式
+== 绘制功能 ==
+autonumber "<font color=blue> 【#】"
+dplugin <-> dplugin:开始监听鼠标事件
+cavans <-> dplugin:mouse:down
+dplugin -> core :调用XXX//TODO，获取状态
+core -> splugin :调用XXX//TODO，获取状态
+splugin -> dplugin :返回绘制状态
+dplugin -> dplugin:根据鼠标事件，进行绘制
+cavans <-> dplugin:mouse:move...
+cavans <-> dplugin:mouse:up...
+dplugin -> dplugin:完成绘制,继续绘制/编辑
+dplugin -> core :调用XXX//TODO
+core -> splugin :调用XXX//TODO，设置状态
+splugin <-> status:同步状态/缓存
+menu <-> status:样式同步，响应式
+@enduml

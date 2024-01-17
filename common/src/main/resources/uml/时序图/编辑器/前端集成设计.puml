@@ -1,0 +1,28 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+mainframe 鉴定书编辑器前端对接说明
+participant "服务器" as server
+box "浏览器" #AliceBlue
+participant "前端应用" as page
+participant "鉴定书编辑器" as editor
+end box
+
+== 初始化 ==
+autonumber "<font color=blue> 【#】"
+page -> editor :创建Iframe
+page -> editor :监听postMessage
+editor ->editor :编辑器初始化
+page <- editor :postMessage\n编辑器已创建
+page -> editor :API-设置数据/参数
+== 编辑 ==
+page <-> server :读取鉴定书
+page -> editor :API-导入JSON
+editor ->editor :用户进行编辑
+== 数据保存 ==
+editor ->editor :用户点击保存
+page <- editor :postMessage\n保存事件
+page -> editor :API-获取图像
+page <-> page :生成Word
+page -> editor :API-获取JSON
+page <-> server :保存鉴定书
+@enduml
