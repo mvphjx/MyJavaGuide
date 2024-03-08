@@ -158,6 +158,14 @@
         </dependency>
     </dependencies>
     <build>
+        <resources>
+            <resource>
+                <!-- 指定资源目录，例如默认的 src/main/resources -->
+                <directory>src/main/resources</directory>
+                <!-- 启用资源过滤 -->
+                <filtering>true</filtering>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -191,6 +199,25 @@
                         </path>
                     </annotationProcessorPaths>
                 </configuration>
+            </plugin>
+            <!--时区转换-->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>1.8</version>
+                <executions>
+                    <execution>
+                        <id>timestamp-property</id>
+                        <goals>
+                            <goal>timestamp-property</goal>
+                        </goals>
+                        <configuration>
+                            <name>build.time</name>
+                            <pattern>yyyy-MM-dd HH:mm:ss</pattern>
+                            <timeZone>GMT+8</timeZone>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
