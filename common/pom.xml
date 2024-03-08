@@ -16,13 +16,13 @@
         <build.timestamp>${maven.build.timestamp}</build.timestamp>
         <maven.build.timestamp.format>yyyy-MM-dd HH:mm:ss</maven.build.timestamp.format>
     </properties>
-<!--    <repositories>-->
-<!--        <repository>-->
-<!--            <id>com.e-iceblue</id>-->
-<!--            <name>e-iceblue</name>-->
-<!--            <url>https://repo.e-iceblue.cn/repository/maven-public/</url>-->
-<!--        </repository>-->
-<!--    </repositories>-->
+    <!--    <repositories>-->
+    <!--        <repository>-->
+    <!--            <id>com.e-iceblue</id>-->
+    <!--            <name>e-iceblue</name>-->
+    <!--            <url>https://repo.e-iceblue.cn/repository/maven-public/</url>-->
+    <!--        </repository>-->
+    <!--    </repositories>-->
     <dependencies>
         <dependency>
             <groupId>cn.hutool</groupId>
@@ -51,11 +51,7 @@
             <artifactId>fastjson</artifactId>
             <version>1.2.31</version>
         </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.8.1</version>
-        </dependency>
+
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
@@ -116,11 +112,50 @@
             <artifactId>mapstruct</artifactId>
             <version>${org.mapstruct.version}</version>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>e-iceblue</groupId>-->
-<!--            <artifactId>spire.doc.free</artifactId>-->
-<!--            <version>5.2.0</version>-->
-<!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>e-iceblue</groupId>-->
+        <!--            <artifactId>spire.doc.free</artifactId>-->
+        <!--            <version>5.2.0</version>-->
+        <!--        </dependency>-->
+        <dependency>
+            <groupId>org.apache.calcite</groupId>
+            <artifactId>calcite-core</artifactId>
+            <version>1.32.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.bluejoe2008</groupId>
+            <artifactId>solr-sql</artifactId>
+            <version>0.9.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.8</version>
+        </dependency>
+        <!--test-->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.8.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <version>2.0.2-beta</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-module-junit4</artifactId>
+            <version>1.7.4</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-api-mockito</artifactId>
+            <version>1.7.4</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
