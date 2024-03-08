@@ -2,6 +2,7 @@ package com.guide.common.crawler;
 /**
  * 阿里技术 专栏，获取所有文章
  * https://www.zhihu.com/column/c_179394357
+ * https://www.zhihu.com/org/a-li-ji-zhu/posts
  * @author hjx
  * @version 1.0
  * @date 2021/8/22 15:58
@@ -31,7 +32,7 @@ import java.util.stream.Collectors;
 public class AliRestFul
 {
     //异步任务执行线程池
-    private static ExecutorService executorService = Executors.newFixedThreadPool(10);
+    private static ExecutorService executorService = Executors.newFixedThreadPool(5);
     //文章总数
     private static int totals = 0;
 
