@@ -21,16 +21,16 @@ package Impl as "Implementation Layer" {
   [Log4j] as Log4jImpl
 }
 
-Slf4jAPI --> LogbackAdapter
-Slf4jAPI --> Slf4jJCLAdapter
-Slf4jAPI --> Slf4jLog4jAdapter
-Slf4jAPI --> Slf4jLog4j2Adapter
-Slf4jAPI --> Slf4jJULAdapter
-LogbackAdapter --> LogbackImpl
-Slf4jJCLAdapter ..> JCLAPI
-Slf4jLog4jAdapter --> Log4jImpl
-Slf4jLog4j2Adapter ..> Log4j2API
-Slf4jJULAdapter --> JULImpl
+Slf4jAPI --> LogbackAdapter:适配
+Slf4jAPI --> Slf4jJCLAdapter:适配
+Slf4jAPI --> Slf4jLog4jAdapter:适配
+Slf4jAPI --> Slf4jLog4j2Adapter:适配
+Slf4jAPI --> Slf4jJULAdapter:适配
+LogbackAdapter --> LogbackImpl:绑定
+Slf4jJCLAdapter ..> JCLAPI:桥接
+Slf4jLog4jAdapter --> Log4jImpl:绑定
+Slf4jLog4j2Adapter ..> Log4j2API:桥接
+Slf4jJULAdapter --> JULImpl:绑定
 
 
 note left of Interface
@@ -46,10 +46,10 @@ note top of Adapter
   它们将接口层的日志调用适配到具体的日志实现。
 end note
 
-note left of Impl
-  实现层 (Implementation Layer)
-  由具体的日志实现组成，
-  如Logback Classic、Log4j2 Core、Log4j和JUL。
+note bottom of Impl
+    实现层 (Implementation Layer)
+    由具体的日志实现组成，
+    如Logback Classic、Log4j2 Core、Log4j和JUL。
 end note
 
 @enduml
