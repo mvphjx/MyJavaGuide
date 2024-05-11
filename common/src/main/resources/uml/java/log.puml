@@ -1,0 +1,55 @@
+@startuml
+
+package Interface as "Interface Layer" {
+  [Log4j2\nlog4j-api] as Log4j2API
+  [Slf4j\nslf4j-api] as Slf4jAPI
+  [JCL] as JCLAPI
+}
+
+package Adapter as "Adapter Layer" {
+  [Log4j2\nlog4j-slf4j2-impl] as Slf4jLog4j2Adapter
+  [Logback\nlogback-classic] as LogbackAdapter
+  [Slf4j\nslf4j-jcl] as Slf4jJCLAdapter
+  [Slf4j\nslf4j-jdk14] as Slf4jJULAdapter
+  [Slf4j\nslf4j-log4j12] as Slf4jLog4jAdapter
+}
+
+package Impl as "Implementation Layer" {
+  [Log4j2\nlog4j2-core] as Log4j2Impl
+  [Logback\nlogback-core] as LogbackImpl
+  [JDK\nJUL] as JULImpl
+  [Log4j] as Log4jImpl
+}
+
+Slf4jAPI --> LogbackAdapter
+Slf4jAPI --> Slf4jJCLAdapter
+Slf4jAPI --> Slf4jLog4jAdapter
+Slf4jAPI --> Slf4jLog4j2Adapter
+Slf4jAPI --> Slf4jJULAdapter
+LogbackAdapter --> LogbackImpl
+Slf4jJCLAdapter ..> JCLAPI
+Slf4jLog4jAdapter --> Log4jImpl
+Slf4jLog4j2Adapter ..> Log4j2API
+Slf4jJULAdapter --> JULImpl
+
+
+note left of Interface
+  接口层 (Interface Layer)
+  包括了日志接口Slf4j\JCL\Log4j2，
+  它们定义了日志调用的API。
+end note
+
+note top of Adapter
+  适配层 (Adapter Layer)
+  包含了适配不同日志接口的适配器，
+  如Logback、Log4j2和Log4j，
+  它们将接口层的日志调用适配到具体的日志实现。
+end note
+
+note left of Impl
+  实现层 (Implementation Layer)
+  由具体的日志实现组成，
+  如Logback Classic、Log4j2 Core、Log4j和JUL。
+end note
+
+@enduml
