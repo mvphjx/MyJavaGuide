@@ -21,17 +21,14 @@ import java.util.Scanner;
 public class NioClient
 {
 
-    /**
-     * 启动
-     */
-    public void start(String nickname) throws IOException
+    public void start(String nickname, int port) throws IOException
     {
         log.info("连接聊天室服务器");
-        SocketChannel socketChannel = SocketChannel.open(new InetSocketAddress("127.0.0.1", 8888));
+        SocketChannel socketChannel = SocketChannel.open(new InetSocketAddress("127.0.0.1", port));
         Selector selector = Selector.open();
         socketChannel.configureBlocking(false);
         socketChannel.register(selector, SelectionKey.OP_READ);
-        log.info("建立通道："+socketChannel);
+        log.info("建立通道：" + socketChannel);
         log.info("新开线程，处理服务端相应的消息");
         new Thread(new NioClientHandler(selector)).start();
         log.info("阻塞命令行，用来发送消息");
@@ -45,6 +42,14 @@ public class NioClient
                 socketChannel.write(Charset.forName("UTF-8").encode(nickname + " : " + request));
             }
         }
+    }
+
+    /**
+     * 启动
+     */
+    public void start(String nickname) throws IOException
+    {
+        start(nickname, 8888);
 
     }
 }

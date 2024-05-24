@@ -1,6 +1,7 @@
 package com.guide.common.io.chatroom.nio;
 
 import cn.hutool.core.util.StrUtil;
+import com.guide.common.io.chatroom.util.ChatRoomUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.BufferedWriter;
@@ -25,6 +26,8 @@ import java.util.concurrent.Executors;
 /**
  * NIO聊天室服务器
  * 优点：只需要一个线程就可以批量处理客户端请求/连接
+ * 缺点：需要进行处理数据的粘包拆包等，需要对底层网络和通信协议有一定的了解。
+ *
  * @author hjx
  * @version 1.0
  * @date 2021年7月31日19:36:52
@@ -32,9 +35,14 @@ import java.util.concurrent.Executors;
 @Slf4j
 public class NioServer
 {
-    private int DEFAULT_PORT = 8888;
     private ServerSocketChannel serverSocketChannel;
     private Selector selector;
+
+    public static void main(String[] args)
+    {
+        NioServer server = new NioServer();
+        server.start();
+    }
 
     public void start()
     {
@@ -42,25 +50,21 @@ public class NioServer
         {
             log.info("构建ServerSocketChannel：端口、非阻塞");
             serverSocketChannel = ServerSocketChannel.open();
-            serverSocketChannel.bind(new InetSocketAddress("127.0.0.1", DEFAULT_PORT));
+            serverSocketChannel.bind(new InetSocketAddress("127.0.0.1", ChatRoomUtil.PORT));
             serverSocketChannel.configureBlocking(false);
             selector = Selector.open();
             log.info("构建多路复用器，开启客户端接入监听");
             serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
             log.info("服务器启动，等待客户端接入");
-            while (true)
+            while (selector.select() > 0)
             {
-                int count = selector.select();
-                if (count > 0)
+                Set<SelectionKey> selectionKeys = selector.selectedKeys();
+                Iterator<SelectionKey> iterator = selectionKeys.iterator();
+                while (iterator.hasNext())
                 {
-                    Set<SelectionKey> selectionKeys = selector.selectedKeys();
-                    Iterator<SelectionKey> iterator = selectionKeys.iterator();
-                    while (iterator.hasNext())
-                    {
-                        SelectionKey key = iterator.next();
-                        serverHandler(key);
-                        iterator.remove();
-                    }
+                    SelectionKey key = iterator.next();
+                    serverHandler(key);
+                    iterator.remove();
                 }
             }
         }
@@ -144,7 +148,7 @@ public class NioServer
     //广播给其他客户端
     private void broadcastMsg(String msg, SelectionKey key) throws IOException
     {
-        log.info("广播信息："+msg);
+        log.info("广播信息：" + msg);
         for (SelectionKey selectionKey : selector.keys())
         {
             if (selectionKey == key)
@@ -160,11 +164,5 @@ public class NioServer
 
         }
 
-    }
-
-    public static void main(String[] args)
-    {
-        NioServer server = new NioServer();
-        server.start();
     }
 }
