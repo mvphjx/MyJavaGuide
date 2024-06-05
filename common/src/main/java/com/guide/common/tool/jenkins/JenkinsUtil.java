@@ -28,7 +28,7 @@ public class JenkinsUtil
 
     public Job getJob(MavenProject mavenProject) throws IOException
     {
-        return jenkins.getJob(mavenProject.getArtifactId());
+        return jenkins.getJob(mavenProject.getJobName());
     }
 
     public void createJob(MavenProject mavenProject) throws IOException
@@ -45,10 +45,16 @@ public class JenkinsUtil
         //修改 maven2-moduleset.scm.hudson.scm.SubversionSCM_-ModuleLocation.remote
         Element remote = XmlUtil.getElementByXPath("//scm//remote", doc);
         remote.setTextContent(mavenProject.getSvnPath());
-        jenkins.createJob(mavenProject.getArtifactId(), XmlUtil.toStr(doc), true);
+        String jobName = mavenProject.getArtifactId();
+        if (!jobName.startsWith("platform-"))
+        {
+            jobName = "platform-" + jobName;
+        }
+        System.out.println("do create:" + mavenProject.getJobName());
+        jenkins.createJob(jobName, XmlUtil.toStr(doc), true);
     }
 
-    public void append(String viewName, String jobName) throws IOException
+    public void append(String viewName, MavenProject mavenProject) throws IOException
     {
         JobWithDetails job = jenkins.getJob("parent");
         JenkinsHttpConnection client = job.getClient();
@@ -58,8 +64,30 @@ public class JenkinsUtil
         Element jobNames = XmlUtil.getElementByXPath("//jobNames", doc);
         Element newElement = XmlUtil.appendChild(jobNames, "string");
         //新增job
-        newElement.setTextContent(jobName);
+        newElement.setTextContent(mavenProject.getJobName());
         jenkins.updateView(viewName, XmlUtil.toStr(doc));
+    }
+
+    public void deleteJob(MavenProject mavenProject) throws IOException
+    {
+        if ("parent".equalsIgnoreCase(mavenProject.getJobName()))
+        {
+            return;
+        }
+        if ("platform-parent".equalsIgnoreCase(mavenProject.getJobName()))
+        {
+            return;
+        }
+        if (this.getJob(mavenProject) != null)
+        {
+            System.out.println("do delete:" + mavenProject.getJobName());
+        }
+        else
+        {
+            System.out.println("not find:" + mavenProject.getJobName());
+            return;
+        }
+        jenkins.deleteJob(mavenProject.getJobName(), true);
     }
 
 }

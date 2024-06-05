@@ -8,8 +8,10 @@ import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONUtil;
 import com.google.common.base.Optional;
 import com.guide.common.tool.jenkins.JenkinsMavenJobCreator;
+import com.guide.common.tool.jenkins.JenkinsUtil;
 import com.guide.common.tool.jenkins.MavenProject;
 import com.guide.common.tool.jenkins.ProjectUtil;
+import com.guide.common.tool.jenkins.VersionChangeUtil;
 import com.offbytwo.jenkins.JenkinsServer;
 import com.offbytwo.jenkins.client.JenkinsHttpConnection;
 import com.offbytwo.jenkins.helper.JenkinsVersion;
@@ -80,25 +82,45 @@ public class JenkinsUtilTest
         Element remote = XmlUtil.getElementByXPath("//scm//remote", doc);
         remote.setTextContent(mavenProject.getSvnPath());
         jenkins.createJob(mavenProject.getArtifactId(), XmlUtil.toStr(doc), true);
-        View abis = jenkins.getView("abis");
-        FolderJob folderJob = new FolderJob();
-
     }
 
     @Test
-    public void getView() throws Exception
+    public void updateView() throws Exception
     {
         JenkinsServer jenkins = new JenkinsServer(new URI("http://192.168.129.168:18080/"), "mic", "micadmin");
-        JobWithDetails job = jenkins.getJob("parent");
-        JenkinsHttpConnection client = job.getClient();
-        //访问  http://192.168.129.168:18080/view/abis/config.xml
+        View abis = jenkins.getView("abis");
+        JenkinsHttpConnection client = abis.getClient();
         String xml = client.get("view/abis/config.xml");
-        System.out.println(xml);
         Document doc = XmlUtil.parseXml(xml);
         Element jobNames = XmlUtil.getElementByXPath("//jobNames", doc);
         Element newElement = XmlUtil.appendChild(jobNames, "string");
         //新增job
-        newElement.setTextContent("test");
-        System.out.println(XmlUtil.toStr(doc));
+        newElement.setTextContent("copyright-info-hisign");
+        jenkins.updateView("abis", XmlUtil.toStr(doc));
+    }
+
+    @Test
+    public void deleteJob() throws Exception
+    {
+        List<MavenProject> projects = ProjectUtil.getAll("C:\\mic\\source\\platform\\java\\trunk");
+        projects = ProjectUtil.getAll("C:\\mic\\source\\platform\\java\\trunk\\common-j");
+        JenkinsUtil jenkinsUtil = new JenkinsUtil("http://192.168.129.168:18080/", "mic", "micadmin");
+        for (MavenProject project : projects)
+        {
+            jenkinsUtil.deleteJob(project);
+        }
+    }
+
+    @Test
+    public void getJob() throws Exception
+    {
+        List<MavenProject> projects = ProjectUtil.getAll("C:\\mic\\source\\platform\\java\\trunk");
+        projects = ProjectUtil.getAll("C:\\mic\\source\\platform\\java\\trunk\\common-j");
+        JenkinsUtil jenkinsUtil = new JenkinsUtil("http://192.168.129.168:18080/", "mic", "micadmin");
+        for (MavenProject project : projects)
+        {
+            Job job = jenkinsUtil.getJob(project);
+            System.out.println(job);
+        }
     }
 }

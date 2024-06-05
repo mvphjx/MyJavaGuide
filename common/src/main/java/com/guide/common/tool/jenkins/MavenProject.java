@@ -10,6 +10,8 @@ public class MavenProject
     private String artifactId;
     private String version;
     private String svnPath;
+    private String filePath;
+    private String jobName;
 
     public MavenProject(String groupId, String artifactId, String version)
     {

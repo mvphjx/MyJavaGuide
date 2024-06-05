@@ -42,7 +42,6 @@ public class ProjectUtil
     public static MavenProject parsePom(File pomFile) throws Exception
     {
         // 解析pom.xml文件以获取Maven项目信息
-        // 这里只是一个示例，具体实现取决于你的解析需求
         // 你可以使用Hutool的XML工具类来解析XML文件
         Document document = XmlUtil.readXML(pomFile);
         Element rootElement = XmlUtil.getRootElement(document);
@@ -71,6 +70,8 @@ public class ProjectUtil
         String svnPath = path.replace("C:/", "https://192.168.128.210/svn/");
         svnPath = svnPath.replace("/pom.xml", "");
         mavenProject.setSvnPath(svnPath);
+        mavenProject.setFilePath(pomFile.getPath());
+        mavenProject.setJobName("platform-" + mavenProject.getArtifactId());
         return mavenProject;
     }
 }

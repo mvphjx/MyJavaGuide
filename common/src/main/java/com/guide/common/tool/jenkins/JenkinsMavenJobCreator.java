@@ -18,7 +18,14 @@ import java.util.List;
 
 public class JenkinsMavenJobCreator
 {
-
+    /**
+     * 1. 遍历所有pom.xml
+     * 2. 创建job
+     * 3. 添加到view
+     *
+     * @param args
+     * @throws Exception
+     */
     public static void main(String[] args) throws Exception
     {
         List<MavenProject> projects = ProjectUtil.getAll("C:\\mic\\source\\platform\\java\\trunk");
@@ -29,6 +36,7 @@ public class JenkinsMavenJobCreator
             if (jenkinsUtil.getJob(project) == null)
             {
                 jenkinsUtil.createJob(project);
+                jenkinsUtil.append("abis", project);
             }
         }
     }
