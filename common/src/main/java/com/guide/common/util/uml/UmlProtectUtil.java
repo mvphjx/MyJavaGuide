@@ -1,4 +1,4 @@
-package com.guide.common.uml;
+package com.guide.common.util.uml;
 
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.StrUtil;
@@ -21,41 +21,9 @@ public class UmlProtectUtil
     //秘钥
     static String INPUT_KEY = null;
 
-    @Test
-    public void decode()
-    {
-        log.info("开始解密");
-        log.info("密码提示:shenfenId");
-        String umlPath = getPath();
-        String key = inputKey();
-        if (FileUtil.isDirectory(umlPath))
-        {
-            File directory = new File(umlPath);
-            for (File file : directory.listFiles())
-            {
-                decodeFile(file, key);
-            }
-        }
-    }
 
-    @Test
-    public void encode()
-    {
-        log.info("开始加密");
-        log.info("密码提示:shenfenId");
-        String umlPath = getPath();
-        String key = inputKey();
-        if (FileUtil.isDirectory(umlPath))
-        {
-            File directory = new File(umlPath);
-            for (File file : directory.listFiles())
-            {
-                encodeFile(file, key);
-            }
-        }
-    }
 
-    public String inputKey()
+    public static String inputKey()
     {
         if (!StrUtil.isEmpty(INPUT_KEY))
         {
@@ -69,7 +37,7 @@ public class UmlProtectUtil
         return key;
     }
 
-    public String getPath()
+    public static String getPath()
     {
         String classPath = UmlProtectUtil.class.getResource("").getPath();
         String prePath = classPath.substring(0, classPath.indexOf("/target/"));
@@ -77,10 +45,8 @@ public class UmlProtectUtil
         return umlPath;
     }
 
-
-
     //解密
-    public void decodeFile(File file, String key)
+    public static void decodeFile(File file, String key)
     {
         String fileName = file.getName();
         if (fileName.endsWith(".puml.encrypt"))
@@ -98,7 +64,7 @@ public class UmlProtectUtil
     }
 
     //加密
-    public void encodeFile(File file, String key)
+    public static void encodeFile(File file, String key)
     {
         String fileName = file.getName();
         if (fileName.endsWith(".puml"))
@@ -111,6 +77,22 @@ public class UmlProtectUtil
         else
         {
             log.warn("不需要加密：" + fileName);
+        }
+    }
+
+    public static void main(String[] args)
+    {
+        log.info("开始解密");
+        log.info("密码提示:shenfenId");
+        String umlPath = getPath();
+        String key = inputKey();
+        if (FileUtil.isDirectory(umlPath))
+        {
+            File directory = new File(umlPath);
+            for (File file : directory.listFiles())
+            {
+                decodeFile(file, key);
+            }
         }
     }
 }
